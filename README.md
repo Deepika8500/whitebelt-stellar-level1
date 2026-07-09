@@ -7,7 +7,7 @@
 
 ## Screenshots
 ![Balance Screenshot](balance.png)
-![Transaction Screenshot](transaction.png)
+![Transaction Screenshot](transaction.png2.png)
 
 ## How to verify
 1. Go to https://whitebelt.stellar.org
