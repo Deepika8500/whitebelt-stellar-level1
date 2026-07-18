@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,35 +24,29 @@
   var server = new StellarSdk.Horizon.Server('https://horizon-testnet.stellar.org');
   var publicKey = "";
 
- document.getElementById('connect').onclick = async function() {
-  try {
-    var connected = await window.freighterApi.isConnected();
-    if (!connected.isConnected) {
-      alert("Install Freighter Extension and set to TESTNET");
-      return;
-    }
+  document.getElementById('connect').onclick = async function() {
+    try {
+      var connected = await window.freighterApi.isConnected();
+      if (!connected.isConnected) {
+        alert("Install Freighter Extension and set to TESTNET");
+        return;
+      }
 
-    var allowed = await window.freighterApi.setAllowed();
-    if (!allowed) {
-      alert("Please allow this app in Freighter");
-      return;
-    }
+      var accessResult = await window.freighterApi.requestAccess();
+      if (accessResult.error) {
+        alert(accessResult.error.message);
+        return;
+      }
 
-    var addressResult = await window.freighterApi.getAddress();
-    if (addressResult.error) {
-      alert(addressResult.error.message);
-      return;
+      publicKey = accessResult.address;
+      document.getElementById('address').innerText = publicKey;
+      document.getElementById('connect').style.display = 'none';
+      document.getElementById('disconnect').style.display = 'inline';
+      getBalance();
+    } catch (e) {
+      alert(e);
     }
-
-    publicKey = addressResult.address;
-    document.getElementById('address').innerText = publicKey;
-    document.getElementById('connect').style.display = 'none';
-    document.getElementById('disconnect').style.display = 'inline';
-    getBalance();
-  } catch (e) {
-    alert(e);
-  }
-};
+  };
 
   document.getElementById('disconnect').onclick = function() {
     publicKey = "";
@@ -107,3 +102,6 @@
 </script>
 </body>
 </html>
+
+
+
