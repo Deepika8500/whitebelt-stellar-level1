@@ -37,24 +37,13 @@ A simple Stellar payment dApp built for the Level 1 White Belt challenge in the 
 
 ## Screenshots
 
-### Wallet Connected State
-
-
-![Wallet Connected](connected.png)
 
 
 
-### Balance Displayed
+### Wallet Connected, Balance Displayed & Successful Transaction
 
 
-![Balance](balance.png)
-
-
-
-### Successful Testnet Transaction & Result
-
-
-![Transaction](transaction.png2.png)
+![Result](result.png)
 
 
 
