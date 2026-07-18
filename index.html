@@ -19,7 +19,7 @@
   <p id="tx-result"></p>
 
 <script type="module">
-import { isConnected, getPublicKey, signTransaction } from "https://unpkg.com/@stellar/freighter-api@latest/dist/index.min.js";
+import { isConnected, setAllowed, getAddress, signTransaction } from "https://unpkg.com/@stellar/freighter-api@latest/dist/index.min.js";
 
 const server = new StellarSdk.Horizon.Server('https://horizon-testnet.stellar.org');
 let publicKey = "";
@@ -28,8 +28,12 @@ document.getElementById('connect').onclick = async () => {
   try {
     const connected = await isConnected();
     if(!connected.isConnected) return alert("Install Freighter Extension and set to TESTNET");
-    
-    const res = await getPublicKey();
+
+    // Explicitly request permission from the wallet
+    const allowed = await setAllowed();
+    if(!allowed) return alert("Please allow this app in Freighter");
+
+    const res = await getAddress();
     publicKey = res.address;
     document.getElementById('address').innerText = publicKey;
     document.getElementById('connect').style.display = 'none';
@@ -77,3 +81,4 @@ document.getElementById('send').onclick = async () => {
 </script>
 </body>
 </html>
+
