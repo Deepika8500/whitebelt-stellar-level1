@@ -19,8 +19,7 @@
   <p id="tx-result"></p>
 
 <script type="module">
-import { isConnected, setAllowed, getAddress, signTransaction } from "https://unpkg.com/@stellar/freighter-api@latest/dist/index.min.js";
-
+import { isConnected, setAllowed, getAddress, signTransaction } from "https://cdn.jsdelivr.net/npm/@stellar/freighter-api@latest/+esm";
 const server = new StellarSdk.Horizon.Server('https://horizon-testnet.stellar.org');
 let publicKey = "";
 
