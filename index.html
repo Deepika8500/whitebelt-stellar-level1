@@ -1,3 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stellar WhiteBelt dApp</title>
+  <script src="https://unpkg.com/@stellar/stellar-sdk@latest/dist/stellar-sdk.min.js"></script>
+  <style>body{font-family:Arial;padding:20px} button{padding:10px;margin:5px}</style>
+</head>
+<body>
+  <h1>Stellar WhiteBelt - Level 1</h1>
+  
+  <button id="connect">Connect Freighter</button>
+  <button id="disconnect" style="display:none">Disconnect</button>
+  
+  <p><b>Address:</b> <span id="address">Not Connected</span></p>
+  <p><b>Balance:</b> <span id="balance">0 XLM</span></p>
+  
+  <input id="receiver" placeholder="Receiver Testnet Address" size="50"/>
+  <button id="send">Send 1 XLM</button>
+  <p id="tx-result"></p>
+
+<script type="module">
+import { isConnected, setAllowed, getAddress, signTransaction } from "https://unpkg.com/@stellar/freighter-api@latest/dist/index.min.js";
+
+const server = new StellarSdk.Horizon.Server('https://horizon-testnet.stellar.org');
+let publicKey = "";
+
+document.getElementById('connect').onclick = async () => {
+  try {
+    const connected = await isConnected();
+    if(!connected.isConnected) return alert("Install Freighter Extension and set to TESTNET");
+
+    const allowed = await setAllowed();
+    if(!allowed) return alert("Please allow this app in Freighter");
+
+    const res = await getAddress();
+    publicKey = res.address;
+    document.getElementById('address').innerText = publicKey;
+    document.getElementById('connect').style.display = 'none';
+    document.getElementById('disconnect').style.display = 'inline';
+    getBalance();
+  } catch(e) { alert(e) }
+}
+
+document.getElementById('disconnect').onclick = () => {
+  publicKey = "";
+  document.getElementById('address').innerText = "Not Connected";
+  document.getElementById('balance').innerText = "0 XLM";
+  document.getElementById('connect').style.display = 'inline';
+  document.getElementById('disconnect').style.display = 'none';
+}
+
+async function getBalance() {
+  const account = await server.loadAccount(publicKey);
+  const xlm = account.balances.find(b => b.asset_type === 'native');
+  document.getElementById('balance').innerText = xlm.balance + " XLM";
+}
+
 document.getElementById('send').onclick = async () => {
   const receiver = document.getElementById('receiver').value;
   if(!receiver) return alert("Enter receiver address");
@@ -26,3 +83,6 @@ document.getElementById('send').onclick = async () => {
     document.getElementById('tx-result').innerText = "Transaction failed: " + (e.message || e);
   }
 }
+</script>
+</body>
+</html>
